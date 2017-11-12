@@ -37,6 +37,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
@@ -89,8 +90,8 @@ void oc_start(void) {
 	d_runtime = opendir(runtimedir);
 	if (d_runtime == NULL) {
 		/* doesn't exist, try to create */
-		if (mkdir(runtimedir) == -1) {
-			oc_writelog("Warning: %s does not exist and cannot be created.\n --> %s\n", runtimedir, strerror(errno));
+		if (mkdir(runtimedir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == -1) {
+			oc_writelog("Warning: %s does not exist and cannot be created: %s\n", runtimedir, strerror(errno));
 		}
 	}
 

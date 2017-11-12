@@ -41,7 +41,7 @@ int handle_connection(struct connection *conn);
 struct connection *register_connection(int fd, struct sockaddr_in peer_addr);
 int create_connection(struct connection *c_info);
 pthread_t *fetch_thread_ptr();
-void connection_thread(void *args);
+void *connection_thread(void *args);
 void free_connection(struct connection *conn);
 void print_threads();
 

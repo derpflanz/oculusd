@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "globals.h"
+#include <dlfcn.h>
 #include "plugindata.h"
 #include "plugin.h"
 

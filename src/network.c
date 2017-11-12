@@ -14,6 +14,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <time.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -21,6 +22,7 @@
 #include "config.h"
 #include "options.h"
 #include "liboculus.h"
+#include <pthread.h>
 #include "command.h"
 #include "plugindata.h"
 
@@ -220,10 +222,12 @@ int create_connection(struct connection *conn) {
 }
 
 
-void connection_thread(void *args) {
+void *connection_thread(void *args) {
 	struct connection *c = (struct connection *)args;
 	handle_connection(c);
 	free_connection(c);
+
+	return NULL;
 }
 
 void free_connection(struct connection *conn) {

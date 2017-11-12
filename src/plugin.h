@@ -29,4 +29,5 @@ int register_commands(struct cmd_table *plugin_commands, void *handle);
 struct plugin *plugin_add(void *handle);
 int plugin_unload(void *handle);
 int plugin_register_events(void *handle);
+int plugin_validate(void * handle, const char * plugin);
 #endif

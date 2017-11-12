@@ -29,8 +29,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "config.h"
+#include "monitor.h"
 #include "options.h"
-#include <time.h>
 #include "liboculus.h"
 #include "plugin.h"
 #include "command.h"

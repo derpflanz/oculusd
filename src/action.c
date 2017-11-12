@@ -1,4 +1,5 @@
 #include "action.h"
+#include <string.h>
 
 int action_alarm_master(const char **args, void *extra) {
 	oc_writelog("[not implemented yet] action_alarm_master: 1->%s, 2->%s, 3->%s\n", args[0], args[1], args[2]);
