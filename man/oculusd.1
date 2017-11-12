@@ -1,0 +1,66 @@
+.\" oculusd man page. 
+.\" Contact bart@friesoft.nl to report errors or omissions. 
+.TH oculusd 1 "14 December 2004" "0.7" "oculusd man page"
+.SH NAME
+oculusd \- a simple server monitor
+.SH SYNOPSIS
+.B oculusd [options]
+.SH EXAMPLES
+oculusd -d 
+.br
+oculusd -v -c /etc/oculus/oculusd.conf
+.SH DESCRIPTION
+.B oculusd
+is a simple server monitor, that uses a plain text, human readable, protocol to query the server. It uses an XML style configuration file and supports plugins for extra functionality. This man page may not describe all commands allowed or supported.
+.SH OPTIONS
+.IP -v
+Be verbose. When this is enabled, the daemon will give all kinds of status information to stdout. 
+.P
+.IP "-c file"
+Use 
+.I file 
+as the configuration file, instead of the default
+.I "/etc/oculusd.conf"
+(see 
+.B oculusd.conf
+(5) for more information).
+.IP -h
+Show help screen.
+.IP -q
+Quiet mode. Only show info in the log.
+.IP -d
+Run in daemon mode.
+.IP "-p port"
+Listen on 
+.I port
+for connections. This will override the port set in the configuration file.
+.SH BUILT IN COMMANDS
+.IP HELP
+Show supported and allowed commands. When HELP is followed by a supported command, it will show its help text.
+.IP QUIT
+Exits the client.
+.IP KILL
+Kills off the server and closes the connection. All other connections stay alive until QUIT is issued in there.
+.IP SHPL
+Show loaded plugins and the commands they export.
+.IP "UNLD name"
+Unload plugin 
+.I name
+if loaded. When 
+.I name
+is ALL, all plugins will de unloaded.
+.IP RELD
+Unload all plugins and reload plugins in the plugin directory.
+.IP CONN
+Show all connected clients.
+.SH FILES
+.IP /etc/oculusd.conf
+Configuration file. See oculusd.conf(5) for a description.
+.SH SEE ALSO
+.BR oculusd.conf(5)
+.SH BUGS
+When Windows telnet is used to connect to the daemon, it will not work properly. This is due to that fact that Windows telnet will send characters immediately after they are typed in, instead of waiting for the [enter] key. GNU telnet works fine with oculusd.
+.SH AUTHOR
+.nf
+Bart Friederichs (bart@friesoft.nl)
+.fi

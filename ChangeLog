@@ -1,0 +1,114 @@
+20100914: version 0.18
+  o Changed the command handler prototype, added struct connection
+  o Removed the 'id' field in alarm, replaced by char *uid, which is client-IP
+    with a client provided string.
+
+20100913: version 0.17
+  o Fixed a few crashes on incorrect configuration
+  o Moved the hardcoded 'args' from event to actions (where they belong)
+  r version 0.17 released to freshmeat
+
+20100826: version 0.16-2
+  o Fix install dirs, from /usr/local to /usr
+  o Created RPM
+  r version 0.16-2 released to freshmeat
+
+20100825: version 0.16.1
+  o Fix Makefile.config; add -fPIC flag, for CentOS build
+  o Fix config/Makefile, plugins/Makefile, removed Ubuntu-specific -i options to 'cp'
+  r version 0.16.1 released to freshmeat
+
+20100812: version 0.16
+  o Implemented event system; plugins can register events that can be connected
+    to actions in the config file
+  r version 0.16 released to freshmeat
+
+20100729: version 0.16
+  o Implemented plugin_unload for plugins
+  o Fixed KILL and RSTR commands (don't kill PPID, but PID)
+  o Implemented event_unload in oc_cleanup
+
+20100725: version 0.15
+  o Implemented action API
+  o Implemented event API
+  r version 0.15 released to freshmeat
+
+20100722: version 0.14
+  o Implemented load and save of alarms
+  r version 0.14 released to freshmeat
+
+20100720: version 0.13
+  o Implemented ALLS, ALST, ALRM functionality
+  r version 0.13 released to freshmeat
+
+20100716: version 0.13
+  o Fixed not closing connection client side on QUIT
+  o Added alarm framework (plugin)
+  o Implemented runtimedir $HOME/.oculusd for usage files
+
+20100503: version 0.12
+  o Implemented threaded server
+  o Implemented CONN command (in libocp_default)
+  r version 0.12 released to freshmeat
+
+2010????: version 0.11
+  o Implemented monitors
+
+20100324: version 0.10 released to freshmeat
+
+20100314: version 0.10
+  o Changed logfile style
+  o Changed build system; removed auto* stuff
+  o Fixed the 'bind: Address already in use' error, when the server disconnects
+
+20050425:
+  o Rewrote signal handling code
+	o Implemented RHSH command
+	o Implemented SIGHUP signal handler
+
+20050423:
+  o Implemented command allowance (got broken by the new command structure)
+	o Re-released oculusd on freshmeat (removed due to disabling of email address), version 0.7
+
+20041214:
+  o Implemented UNLD command
+	o Implemented RELD command
+	o Builtin commands in separate array
+
+20041208: 
+	o Updated plugin data structure: use linked list
+	o Builtin commands in plugin libocp_servcmd
+
+20041123: 0.6.2 released, info below comes from the TODO file
+	Bugs fixed:
+	o When a user presses [ENTER] without a command, it disconnects. It should 
+		give a message.
+	o The weird stuff at the end of a buffer in 'UPTI', perhaps other commands as 	
+		well. 
+	o libocp_process.c: Segfault when no plugin configfile in oculus configfile
+	
+	Features added:
+	o create liboculus.h, put prototypes in there 
+	o remake get_multiple*() functions, generalise, use xpath_execute now
+	o Config in oculusd.conf
+	
+	Code cleanups
+	o Change the names of the string array functions 
+	o Change char * to BUFFER where appropriate
+	
+	Plugins
+	o Implemented process plugin (PLST, PLOG, PSIG)
+		o process plugin: NO check if the process is monitored at all, in the 
+			configfile
+		o PLOG a process that has no logfile defined, returns '0' (see demopage, 
+			try PLOG sshd)
+
+0.3
+	 Added XML config file support
+	 Several bugfixes
+
+0.2
+	 No changelog updated
+
+0.1
+	 Initial version

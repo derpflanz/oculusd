@@ -1,0 +1,18 @@
+I got fed up with autotools (which are not so 'auto' after all) and created my own Makefiles.
+This is not portable, but usable for us. If it works for you, you're lucky, if not, good luck.
+
+Installation
+============
+Just 'make' and 'make install' as root.
+
+It will install in 	/usr/
+
+config files are in /etc/oculusd/
+plugins are in 		/usr/lib/oculusd/
+libs are in 		/usr/lib/
+binaries are in		/usr/bin/
+manpages are in		/usr/man/
+
+Uninstallation
+==============
+Run 'make uninstall'. It should delete all files.

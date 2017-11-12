@@ -1,0 +1,41 @@
+<!-- 
+  oculusd.dtd version 1.0
+
+This DTD is for the configuration file of oculusd.
+-->
+
+<!-- root element -->
+<!ELEMENT oculusd (server,master?,onmp,event*)>
+<!ATTLIST oculusd
+          version CDATA #REQUIRED>
+
+<!-- first layer -->
+<!ELEMENT server (host,port,hosts-allow,logfile,plugindir,plugin*)>
+<!ELEMENT master (host,port)>
+<!ELEMENT onmp (allowed-commands)>
+<!ELEMENT event (action*)>
+<!ATTLIST event name CDATA #REQUIRED>
+
+<!-- server elements -->
+<!ELEMENT host (#PCDATA)>
+<!ELEMENT port (#PCDATA)>
+<!ELEMENT hosts-allow (host*)>
+<!ELEMENT logfile (#PCDATA)>
+<!ELEMENT plugindir (#PCDATA)>
+<!ELEMENT plugin (config)>
+<!ATTLIST plugin name CDATA #REQUIRED>
+
+
+<!-- onmp elements -->
+<!ELEMENT allowed-commands (command*)>
+<!ELEMENT command (#PCDATA)>
+
+<!-- plugin elements -->
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT config (#PCDATA)>
+
+<!-- event elements -->
+<!ELEMENT action (arg*)>
+<!ATTLIST action name CDATA #REQUIRED>
+<!ELEMENT arg (#PCDATA)>
+<!ATTLIST arg name CDATA #REQUIRED>

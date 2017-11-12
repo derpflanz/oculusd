@@ -1,0 +1,141 @@
+.\" oculusd.conf man page. 
+.\" Contact bart@friesoft.nl to report errors or omissions. 
+.TH oculusd.conf 5 "07 November 2004" "1.0" "oculusd.conf man page"
+.SH NAME
+oculusd.conf \- oculusd config file (XML format)
+.SH DESCRIPTION
+.B oculusd.conf 
+is the oculusd configuration file. It uses XML style syntax and adheres to the oculusd.dtd, which is usually located in /usr/local/share/oculusd.dtd. A sample config file can also be found there. The file has the following structure:
+.br
+
+.br
+<?xml version="1.0"?>
+.br
+<!DOCTYPE oculusd 
+.br
+   SYSTEM "/usr/local/share/oculusd/oculusd.dtd">
+.br
+<oculusd version="0.6">
+.br
+[ elements ]
+.br
+</oculusd>
+.br
+
+.SH ALLOWED ELEMENTS
+.IP oculusd
+The root element. All other elements are placed in here. This element has one attribute 
+.I version
+which holds the oculusd dtd version. This element can have only two elements:
+.I server
+and 
+.I onmp
+.IP server
+Describes the behaviour of the server, and can have the following elements:
+.I host,
+.I port,
+.I hosts-allow,
+.I logfile,
+.I plugindir,
+and multiple
+.I plugin
+elements. The 
+.I plugin 
+is optional for every plugin, to create some flexibility in plugin programming. See below for explanation of all the elements.
+.IP onmp
+Describes the behaviour of allowed commands. Can have the following elements:
+.I allowed-commands
+.IP host
+The IP adress on which the deamon should listen.
+.IP port
+The port on which to listen.
+.IP hosts-allow
+A list of hosts that can connect. This can have multiple 
+.I host
+elements. See above for the
+.I host
+element.
+.IP logfile
+The file where to log to.
+.IP plugindir
+The directory where oculus plugins can be found.
+.IP plugin
+This element is optional, for referring plugins to their own configuration files. It holds two elements:
+.I name
+and 
+.I config
+.IP name
+The basename of the plugin, which is the filename, without the .so extension.
+.IP config
+The configuration file of the plugin.
+.IP allowed-commands
+A list of 
+.I command 
+elements that define the commands that are allowed.
+.IP command
+A command.
+.SH EXAMPLES
+.B "server section"
+.br
+<server>
+.br
+  <server>
+.br
+    <host>127.0.0.1</host>
+.br
+    <port>1976</port>
+.br
+    <hosts-allow>
+.br
+		<host>127.0.0.1</host>
+.br
+    </hosts-allow>
+.br
+    <logfile>/var/log/oculusd.log</logfile>
+.br
+    <plugindir>/usr/local/share/oculusd/plugins
+	</plugindir>
+.br
+	<plugin>
+.br
+		<name>libocp_process</name>
+.br
+		<config>/etc/oculusd/plugins/process.conf
+		</config>
+.br
+	</plugin>
+.br
+  </server>
+.br
+
+.br
+.B onmp section
+.br
+  <onmp>
+.br
+    <allowed-commands>
+.br
+      <command>UPTI</command>
+.br
+	  <command>UNAM</command>
+.br
+      <command>HELP</command>
+.br
+      <command>QUIT</command>
+.br
+      <command>KILL</command>
+.br
+      <command>PROC</command>
+.br
+    </allowed-commands>
+.br
+  </onmp>
+.br
+.SH SEE ALSO
+.BR oculusd (1)
+.SH BUGS
+The version attribute in the config file is not checked against.
+.SH AUTHOR
+.nf
+Bart Friederichs (bart@friesoft.nl)
+.fi

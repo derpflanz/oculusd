@@ -1,0 +1,17 @@
+<!--
+	process.dtd
+	The DTD of the process plugin.
+-->
+
+<!-- root element -->
+<!ELEMENT processplugin (process*)>
+
+<!ELEMENT process (log?,allowed-signal*)>
+<!ATTLIST process name CDATA #REQUIRED>
+
+<!ELEMENT log (name,lines)>
+<!ELEMENT allowed-signal EMPTY>
+<!ATTLIST allowed-signal id CDATA #REQUIRED>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT lines (#PCDATA)>
