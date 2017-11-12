@@ -125,32 +125,11 @@ struct reply *alarm_list(char **cmdline, const struct connection *conn) {
 	return rpl;
 }
 
-char *alarm_create_uid(char *uid, struct sockaddr_in peer) {
-	char *new_uid;
-	int uid_size = strlen(uid);
-
-	// 9 = 4 bytes of IP x 2 nibbles + \0
-	new_uid = (char *) malloc ((uid_size + 9) * sizeof(char));
-	bzero(new_uid, uid_size + 9);
-
-	sprintf(new_uid, "%02x%02x%02x%02x",
-		(peer.sin_addr.s_addr & 0xff000000) >>24,
-		(peer.sin_addr.s_addr & 0x00ff0000) >>16,
-		(peer.sin_addr.s_addr & 0x0000ff00) >>8,
-		(peer.sin_addr.s_addr & 0x000000ff)
-	);
-
-	// put the uid *after* the IP
-	strncpy(new_uid+8, uid, uid_size);
-
-	return new_uid;
-}
-
 struct alarm *alarm_create(char **cmdline, const struct connection *conn) {
 	struct alarm *ret = (struct alarm *)malloc(sizeof(struct alarm));
 
 	ret->message = strdup(cmdline[2]);
-	ret->uid = alarm_create_uid(cmdline[1], conn->peer_address);
+	ret->uid = strdup(cmdline[1]);
 	ret->t_set = time(NULL);
 	ret->next = NULL;
 
@@ -223,7 +202,7 @@ struct reply *alarm_remove(char **cmdline, const struct connection *conn) {
 		rpl->code = WRN_WRONGPARAM;
 		rpl->result = buffer_addf(rpl->result, "No alarm id given.\n");
 	} else {
-		char *uid = alarm_create_uid(cmdline[1], conn->peer_address);
+		char *uid = strdup(cmdline[1]);
 		struct alarm *al = alarms;
 		struct alarm *prev = NULL;
 		char foundit = 0;

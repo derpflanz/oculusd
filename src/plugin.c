@@ -278,7 +278,7 @@ int plugin_register_events(void *handle) {
 					action = action_lookup(action_name);
 
 					// and fetch the arguments
-					while (action->args[k]) {
+					while (action != NULL && action->args[k]) {
 						snprintf(buffer, 1024, "/oculusd/event[@name='%s']/action/arg[@name='%s']/text()", plugin_events[i].event_name, action->args[k]);
 
 						xpathObj2 = xmlXPathEvalExpression(buffer, xpath_ctx);

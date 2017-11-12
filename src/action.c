@@ -2,23 +2,25 @@
 #include <string.h>
 
 int action_alarm_master(const char **args, void *extra) {
+	/* this action is meant to send an alarm to another oculus server */
 	oc_writelog("[not implemented yet] action_alarm_master: 1->%s, 2->%s, 3->%s\n", args[0], args[1], args[2]);
 
 	return OK;
 }
 
 int action_send_mail(const char **args, void *extra) {
-	oc_writelog("[not implemented yet] action_send_master: 1->%s, 2->%s\n", args[0], args[1]);
+	oc_writelog("[not implemented yet] action_send_mail: 1->%s, 2->%s\n", args[0], args[1]);
 
 	return OK;
 }
 
 int action_set_alarm(const char **args, void *extra) {
+	oc_writelog("Setting alarm on local oculusd: %s\n", args[0]);
+
+
 
 	return OK;
 }
-
-
 
 const char *args_alarm_master[] = { "host", "port", "alarm_uid", NULL };
 const char *args_set_alarm[]    = { "alarm_uid", NULL };
@@ -47,7 +49,7 @@ int (*action_fetch_handler(const char *action_name)) (const char **args, void *e
 
 struct action *action_lookup(const char *action_name) {
 	int i = 0;
-	struct action *ret;
+	struct action *ret = NULL;
 
 	while (action_map[i].name) {
 		if (!strcmp(action_map[i].name, action_name)) {
