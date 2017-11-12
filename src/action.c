@@ -1,9 +1,22 @@
 #include "action.h"
 #include <string.h>
+#include "liboculus.h"
+#include <errno.h>
 
-int action_alarm_master(const char **args, void *extra) {
-	/* this action is meant to send an alarm to another oculus server */
-	oc_writelog("[not implemented yet] action_alarm_master: 1->%s, 2->%s, 3->%s\n", args[0], args[1], args[2]);
+int action_command(const char **args, void *extra) {
+	char *cmd;
+	int port, maxlen = strlen(args[2]) + strlen(extra);
+
+	port = atoi(args[1]);
+	cmd = malloc(maxlen + 1);
+	snprintf(cmd, maxlen, args[2], extra);
+
+	/* this action is meant to send a command to another oculus server */
+	int result = oc_send_command(args[0], port, cmd);
+
+	if (result == OK) {
+		oc_writelog("Sent '%s' to %s:%d\n", cmd, args[0], port);
+	}
 
 	return OK;
 }
@@ -14,21 +27,11 @@ int action_send_mail(const char **args, void *extra) {
 	return OK;
 }
 
-int action_set_alarm(const char **args, void *extra) {
-	oc_writelog("Setting alarm on local oculusd: %s\n", args[0]);
-
-
-
-	return OK;
-}
-
-const char *args_alarm_master[] = { "host", "port", "alarm_uid", NULL };
-const char *args_set_alarm[]    = { "alarm_uid", NULL };
+const char *args_command[] = { "host", "port", "command", NULL };
 const char *args_send_mail[]    = { "recipient", "subject", NULL };
 
 struct action action_map[] = {
-	{ "action_alarm_master", args_alarm_master, action_alarm_master },
-	{ "action_set_alarm", args_set_alarm, action_set_alarm },
+	{ "action_command", args_command, action_command },
 	{ "action_send_mail", args_send_mail, action_send_mail },
 	{ NULL, NULL, NULL }
 };

@@ -42,7 +42,12 @@
 #define RHSH_SERVER       	603
 #define KILL_SERVER			602
 #define QUIT				601
- 
+
+/* network errors */
+#define ERR_TIMEOUT			900
+#define ERR_NOCONNECT		901
+#define ERR_NORESOLVE		902
+
 #include <libxml/xpath.h>
 #include "globals.h"
 #include "event.h"
@@ -62,6 +67,9 @@ void oc_cleanup(void);
  * <entry> can be a printf-style string
  */
 void oc_writelog(char const *entry,  ...);
+
+/* send an ONMP command to another oculus server */
+int oc_send_command(const char *host, const int port, const char *cmd);
 
 /* Remove leading and trailing whitespace from the the NULL terminated str
  */

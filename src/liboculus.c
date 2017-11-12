@@ -31,6 +31,7 @@
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
+#include <netdb.h>
 #include <libxml/parser.h>
 #include <libxml2/libxml/tree.h>
 
@@ -189,6 +190,55 @@ void oc_writelog(char const *entry,  ...) {
 	free(timestring);
 }
 
+int oc_send_command(const char *host, const int port, const char *cmd) {
+	struct hostent *server;
+	int sockfd, n;
+	struct sockaddr_in serveraddr;
+	int ret = ERR_UNKNOWN;
+
+	server = gethostbyname(host);
+	if (server == NULL) {
+		oc_writelog("Could not resolve %s\n", host);
+		ret = ERR_NORESOLVE;
+	} else {
+		sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+	    /* build the server's Internet address */
+	    bzero((char *) &serveraddr, sizeof(serveraddr));
+	    serveraddr.sin_family = AF_INET;
+	    bcopy((char *)server->h_addr,
+		  (char *)&serveraddr.sin_addr.s_addr, server->h_length);
+	    serveraddr.sin_port = htons(port);
+
+	    if (connect(sockfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) < 0) {
+	    	oc_writelog("could not connect to %s:%s: %s\n", host, port, strerror(errno));
+	    	ret = ERR_NOCONNECT;
+	    } else {
+	    	char buf[1024];
+	    	bzero(buf, 1024);
+	    	n = read_with_timeout(sockfd, buf, 1024, 1000);
+
+	    	if (n > 0 && buf[0] == '+') {
+				write(sockfd, cmd, strlen(cmd));
+		    	bzero(buf, 1024);
+				n = read_with_timeout(sockfd, buf, 1024, 1000);
+
+				if (n > 0 && buf[0] == '+') {
+					ret = OK;
+				} else {
+					oc_writelog("send command failed '%s' to %s:%d; got %s\n", cmd, host, port, buf);
+					ret = ERR_NOSUPPORT;
+				}
+			} else {
+				oc_writelog("send command failed (timeout?) '%s' to %s:%d; got %s\n", cmd, host, port, buf);
+			}
+	    	close(sockfd);
+	    }
+	}
+
+	return ret;
+}
+
 
 /* String array functions. Usage:
  * char **str_arr;
@@ -290,11 +340,12 @@ char **string_array_create(char *string) {
 
 	/* we accept words or sentences with double quotes */
 	re = pcre_compile("[A-Za-z0-9]+|\\\"[A-Za-z0-9\\s\\.'\\?]+\\\"", PCRE_MULTILINE,  &error,  &erroffset,  NULL);
-	if (re == NULL ) oc_writelog ("%s\n", error);
+	if (re == NULL ) oc_writelog ("pcre_compile error: %s\n", error);
 
 	while (rc > 0) {
 		rc = pcre_exec(re, NULL, string, strlen(string),  i,  0,  ovector, 2);
-		pcre_copy_substring(string, ovector, rc, 0, buffer, strlen(string));
+		bzero(buffer, strlen(string));
+		pcre_copy_substring(string, ovector, rc, 0, buffer, strlen(string)+1);
 		
 		if (rc > 0) {
 			/* we found a word, put it in our string array list */
@@ -323,7 +374,7 @@ char **string_array_create(char *string) {
 		oc_writelog("Realloc failed in string_array_create(). Stop.\n");
 		oc_exit(1);
 	}
-	
+
 	return ret;
 }
 

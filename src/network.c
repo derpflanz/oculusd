@@ -29,6 +29,28 @@
 int sockfd;
 struct sockaddr_in my_addr;
 
+int read_with_timeout(int fd, char *buf, int buflen, int millisecs) {
+	fd_set set;
+	struct timeval timeout;
+	int rv, ret = ERR_UNKNOWN;
+
+	FD_ZERO(&set);
+	FD_SET(fd, &set);
+
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 1000 * millisecs;
+
+	rv = select(fd + 1, &set, NULL, NULL, &timeout);
+	if (rv == -1 || rv == 0) {
+		ret = rv;
+	} else {
+		ret = read(fd, buf, buflen);
+	}
+
+	return ret;
+}
+
+
 int handle_connection(struct connection *conn)  {
 	unsigned char connected = 1;
 	int ret = 0, result = 0;
@@ -37,13 +59,11 @@ int handle_connection(struct connection *conn)  {
 	
 	while (connected) {
 		char buffer[1024];
+		bzero(buffer, 1024);
 		char **cmdline;
 		ssize_t len;
 
 		len = recv(conn->socket, buffer, 1023, 0);
-		
-		/* buffer is filled with crap, cut off */
-		buffer[len] = '\0';
 		
 		if (len == 0) {
 			/* client disconnected */
@@ -56,7 +76,7 @@ int handle_connection(struct connection *conn)  {
 				if (len >=2 && buffer[len-2] == '\r') buffer[len-2] = '\0';
 				else if (len >= 1 && buffer[len-1] == '\n') buffer[len-1] = '\0';
 
-				oc_writelog("host: %s, command: %s, result %d\n", inet_ntoa(conn->peer_address.sin_addr), buffer, result);
+				oc_writelog("host: %s, command: %s, result %d\n", inet_ntoa(conn->peer_address.sin_addr), cmdline[0], result);
 				if (result == QUIT) {
 					connected = 0;
 					ret = -1;

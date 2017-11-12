@@ -45,4 +45,7 @@ void *connection_thread(void *args);
 void free_connection(struct connection *conn);
 void print_threads();
 
+/* returns -1 on error, 0 on timeout, or positive integer for number of read bytes */
+int read_with_timeout(int fd, char *buf, int buflen, int millisecs);
+
 #endif

@@ -1,27 +1,6 @@
 /*
  * Oculus Network Monitor (C) 2003-2004 Bart Friederichs
- * oculusd - command.c v0.7
- *
- * oculusd is the server part of oculus
- * command.c
  */
-
-/* Changes
- * 0.8
- *  o Added RSTR command
- * 0.7
- *  o Added SHPL, RELD and UNLD commands
- * 0.4
- *  o Don't copy the contents of the default_cmds array, just point at the content
- *  o Cleaned up KILL code
- *  o Bugfixes:
- *    - Close connection on empty command
- * 0.2-0.3
- *  no changes kept
- * 0.1 
- *  initial release
- */
-
 
 #include <stdio.h>
 #include <string.h>

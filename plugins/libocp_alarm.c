@@ -184,7 +184,7 @@ struct reply *alarm_set(char **cmdline, const struct connection *conn) {
 			save_alarms(alarm_file);
 
 			// and fire our 'alarm_set' event
-			event_fire("alarm_set", NULL);
+			event_fire("alarm_set", al->message);
 		}
 	}
 
