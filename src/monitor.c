@@ -12,6 +12,7 @@
 #include <dlfcn.h>
 #include "plugindata.h"
 #include "plugin.h"
+#include "liboculus.h"
 
 pthread_t monitor_thread;
 
@@ -29,26 +30,30 @@ int monitor_initialise() {
 
 void *monitor_loop(void *p) {
 	unsigned int seconds = 0;
-	
-	while (1) {
-		struct plugin *el = plugins;
-		
-		while (el->next != NULL) {
-			struct mon_table *monitors = el->monitors;
 
-			if (monitors != NULL) {
-				// found an array with monitor functions
-				int i = 0;
-				while (monitors[i].handler != NULL) {
-					monitor_fire(el->handle, &monitors[i]);
-					i++;
+	if (plugins == NULL) {
+		oc_writelog("No plugins found, monitoring loop NOT started.\n");
+	} else {
+		while (1) {
+			struct plugin *el = plugins;
+
+			while (el->next != NULL) {
+				struct mon_table *monitors = el->monitors;
+	
+				if (monitors != NULL) {
+					// found an array with monitor functions
+					int i = 0;
+					while (monitors[i].handler != NULL) {
+						monitor_fire(el->handle, &monitors[i]);
+						i++;
+					}
 				}
+				el = el->next;
 			}
-			el = el->next; 
+
+			/* we sleep one second */
+			usleep(1000000);
 		}
-		
-		/* we sleep one second */
-		usleep(1000000);
 	}
 	
 	return NULL;

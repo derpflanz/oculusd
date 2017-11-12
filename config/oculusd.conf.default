@@ -7,8 +7,8 @@
     <hosts-allow>
 		<host>127.0.0.1</host>
     </hosts-allow>
-    <logfile>oculus.log</logfile>
-    <plugindir>plugins/</plugindir>
+    <logfile>/var/log/oculus.log</logfile>
+    <plugindir>/usr/lib/oculusd</plugindir>
   </server>
   <onmp>
     <allowed-commands>
@@ -19,4 +19,3 @@
     </allowed-commands>
   </onmp>
 </oculusd>
-

@@ -6,17 +6,7 @@
  * liboculus.c 
  * this holds some generic functions for use for oculus
  */
- 
-/*
- * Changes
- * 0.4
- *  o Added dynamic buffer supported
- *  o Misc bugfixes
- * 0.2-0.3
- *  No changes kept
- * 0.1
- *  Initial release
- */
+
 #include "liboculus.h" 
 #include "config.h"
 #include <errno.h>
@@ -49,6 +39,7 @@
 char 
 	help = 0, verbose = 0, quiet = 0, 
 	runasdaemon = 0, caughthup = 0;
+
 char 
 	*logfile_name = NULL, *oc_host = NULL, 
 	*plugindir = NULL, *config_file = NULL,
@@ -92,7 +83,11 @@ void oc_start(void) {
 		/* doesn't exist, try to create */
 		if (mkdir(runtimedir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == -1) {
 			oc_writelog("Warning: %s does not exist and cannot be created: %s\n", runtimedir, strerror(errno));
+		} else {
+			oc_writelog("Created runtime dir: %s\n", runtimedir);
 		}
+	} else {
+		oc_writelog("Using runtime dir: %s\n", runtimedir);
 	}
 
 	if (cmdline_port != -1) oc_port = cmdline_port;
